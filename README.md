@@ -3,8 +3,8 @@
 ## Quick Start 起動方法
 
 ```bash
-# Run in Docker
-docker compose up
+# Build in Docker
+docker compose up -d --build
 # use -d flag to run in background
 
 # Tear down
@@ -15,4 +15,18 @@ volumes: ['./:/usr/src/app']
 
 # To re-build
 docker compose build
+```
+
+## mongoDB の使い方メモ
+
+Docker 起動後、mongo コンテナ内に入る
+
+```
+docker exec -it mongo bash
+```
+
+mongo shell の起動、以下のコマンドを実行
+
+```
+mongosh
 ```
