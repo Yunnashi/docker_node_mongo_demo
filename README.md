@@ -1,7 +1,8 @@
 # Docker Node MongoDB DEMO
 
 この API の説明
-これは TODO アプリの基本 CRUD API サーバーです
+
+TODO アプリの基本 CRUD API サーバーです
 
 ## RUST の内容
 
