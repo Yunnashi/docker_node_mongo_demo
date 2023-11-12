@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDoの新規登録</title>
+  </head>
+  <body>
+    <h1>ToDoの新規登録</h1>
+    <form action="/todos" method="POST">
+      <section>
+        <label for="name">タイトル</label>
+        <input type="text" name="name" id="name" placeholder="タイトル" />
+      </section>
+      <section>
+        <label for="date">日付</label>
+        <input type="date" name="date" id="date" placeholder="日付" />
+      </section>
+      <section>
+        <label for="category">優先順位</label>
+        <select name="category" id="category">
+          <% for(let category of categories){ %>
+          <option value="<%= category %>"><%= category %></option>
+          <% } %>
+        </select>
+      </section>
+      <section>
+        <label for="memo">メモ</label>
+        <br />
+        <textarea
+          name="memo"
+          id="memo"
+          cols="30"
+          rows="5"
+          placeholder="メモ"
+        ></textarea>
+      </section>
+      <button>登録</button>
+    </form>
+  </body>
+</html>

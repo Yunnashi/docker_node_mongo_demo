@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo一覧</title>
+  </head>
+  <body>
+    <h1>ToDo一覧</h1>
+    <ul>
+      <% for(let todo of todos){ %>
+      <li>
+        <a href="/todos/<%=todo.id %>"><b><%=todo.name %></b></a>
+        <br />
+        日付： <%= todo.date %> - 優先順位： <%= todo.category %>
+        <br />
+        メモ： <%= todo.memo %>
+      </li>
+      <% } %>
+    </ul>
+    <a href="/todos/new">新規作成</a>
+  </body>
+</html>

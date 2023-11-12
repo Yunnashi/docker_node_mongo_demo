@@ -1,5 +1,20 @@
 # Docker Node MongoDB DEMO
 
+この API の説明
+これは TODO アプリの基本 CRUD API サーバーです
+
+## RUST の内容
+
+GET /todos - ToDo 一覧を取得
+
+POST /todos - 新しい ToDo を作成
+
+GET /todos/:id - 特定の ToDo を一つ取得
+
+PUT /todos/:id - 特定の ToDo を更新
+
+DELETE /todos/:id - 特定の ToDo を削除
+
 ## Quick Start 起動方法
 
 ```bash

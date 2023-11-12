@@ -21,52 +21,52 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
-const Product = require("./models/product");
-const categories = ["果物", "野菜", "乳製品"];
+const Todo = require("./models/todo");
+const categories = ["なし", "低", "中", "高"];
 
-app.get("/products", async (req, res) => {
-  const products = await Product.find().catch((e) =>
+app.get("/todos", async (req, res) => {
+  const todos = await Todo.find().catch((e) =>
     res.status(404).json({ msg: "No items found" })
   );
-  res.render("products/index", { products });
+  res.render("todos/index", { todos });
 });
 
-app.get("/products/new", (req, res) => {
-  res.render("products/new", { categories });
+app.get("/todos/new", (req, res) => {
+  res.render("todos/new", { categories });
 });
 
-app.post("/products", async (req, res) => {
-  const newProduct = new Product(req.body);
-  await newProduct.save();
-  console.log(newProduct);
-  res.redirect(`/products/${newProduct._id}`);
+app.post("/todos", async (req, res) => {
+  const newTodo = new Todo(req.body);
+  await newTodo.save();
+  console.log(newTodo);
+  res.redirect(`/todos/${newTodo._id}`);
 });
 
-app.get("/products/:id", async (req, res) => {
+app.get("/todos/:id", async (req, res) => {
   const { id } = req.params;
-  const product = await Product.findById(id);
-  res.render("products/show", { product });
+  const todo = await Todo.findById(id);
+  res.render("todos/show", { todo });
 });
 
-app.get("/products/:id/edit", async (req, res) => {
+app.get("/todos/:id/edit", async (req, res) => {
   const { id } = req.params;
-  const product = await Product.findById(id);
-  res.render("products/edit", { product, categories });
+  const todo = await Todo.findById(id);
+  res.render("todos/edit", { todo, categories });
 });
 
-app.put("/products/:id", async (req, res) => {
+app.put("/todos/:id", async (req, res) => {
   const { id } = req.params;
-  const product = await Product.findByIdAndUpdate(id, req.body, {
+  const todo = await Todo.findByIdAndUpdate(id, req.body, {
     runValidators: true,
     new: true,
   });
-  res.redirect(`/products/${product._id}`);
+  res.redirect(`/todos/${todo._id}`);
 });
 
-app.delete("/products/:id", async (req, res) => {
+app.delete("/todos/:id", async (req, res) => {
   const { id } = req.params;
-  await Product.findByIdAndDelete(id);
-  res.redirect("/products");
+  await Todo.findByIdAndDelete(id);
+  res.redirect("/todos");
 });
 
 app.get("*", (req, res) => {

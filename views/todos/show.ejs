@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= todo.name %></title>
+  </head>
+  <body>
+    <h1><%= todo.name %></h1>
+    <section>日付： <%= todo.date %></section>
+    <section>優先順位： <%= todo.category %></section>
+    <section>メモ： <%= todo.memo %></section>
+    <a href="/todos/<%=todo.id %>/edit">編集</a>
+    <a href="/todos">ToDo一覧へ戻る</a>
+    <form action="/todos/<%=todo.id %>?_method=DELETE" method="POST">
+      <button>削除</button>
+    </form>
+  </body>
+</html>
