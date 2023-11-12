@@ -4,6 +4,8 @@
 
 TODO アプリの基本 CRUD API サーバーです。
 
+Express*Mongoose*MongoDBで作成しています。
+
 ejsにて簡易的な画面を作成しています。
 
 ## RUST の内容
