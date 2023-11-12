@@ -2,7 +2,9 @@
 
 この API の説明
 
-TODO アプリの基本 CRUD API サーバーです
+TODO アプリの基本 CRUD API サーバーです。
+
+ejsにて簡易的な画面を作成しています。
 
 ## RUST の内容
 
