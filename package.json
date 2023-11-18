@@ -11,6 +11,7 @@
   "license": "",
   "dependencies": {
     "ejs": "^2.6.1",
+    "ejs-mate": "^4.0.0",
     "express": "^4.16.3",
     "method-override": "^3.0.0",
     "mongoose": "^5.2.7"

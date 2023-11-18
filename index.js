@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const ejsMate = require("ejs-mate");
 const PORT = 3000;
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.engine("ejs", ejsMate);
 
 // Connect to MongoDB
 mongoose

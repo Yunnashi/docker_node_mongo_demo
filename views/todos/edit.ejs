@@ -1,48 +1,53 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ToDoの編集</title>
-  </head>
-  <body>
-    <h1>ToDoの編集</h1>
+<% layout('layouts/boilerplate') %>
+<div class="row">
+  <h1 class="text-center">ToDoの編集</h1>
+  <div class="offset-3 col-6">
     <form action="/todos/<%= todo._id %>?_method=PUT" method="POST">
-      <section>
-        <label for="name">タイトル</label>
+      <div class="mb-3">
+        <label for="name" class="form-label">タイトル</label>
         <input
+          class="form-control"
           type="text"
           name="name"
           id="name"
           placeholder="タイトル"
           value="<%= todo.name %>"
         />
-      </section>
-<section>
-  <label for="date">日付</label>
-  <input
-    type="date"
-    name="date"
-    id="date"
-    placeholder="日付"
-    value="<%= todo.date %>"
-  />
-</section>
-<section>
-  <label for="category">優先順位</label>
-  <select name="category" id="category" value="<%= todo.category %>">
-    <% for(let category of categories){ %>
-    <option value="<%= category %>" <%= todo.category === category ? 'selected' : '' %>><%= category %></option>
-    <% } %>
-  </select>
-</section>
-<section>
-  <label for="memo">メモ</label>
-  <br>
-  <textarea name="memo" id="memo" cols="30" rows="5" placeholder="メモ"><%= todo.memo %></textarea>
-</section>
-<button>登録</button>
+      </div>
+      <div class="mb-3">
+        <label for="date" class="form-label">日付</label>
+        <input
+          class="form-control"
+          type="date"
+          name="date"
+          id="date"
+          placeholder="日付"
+          value="<%= todo.date %>"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="category" class="form-label">優先順位</label>
+        <select class="form-select" name="category" id="category" value="<%= todo.category %>">
+          <% for(let category of categories){ %>
+            <option value="<%= category %>" <%= todo.category === category ? 'selected' : '' %>><%= category %></option>
+            <% } %>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="memo" class="form-label">メモ</label>
+        <textarea
+          class="form-control"
+          name="memo"
+          id="memo"
+          cols="30"
+          rows="5"
+          placeholder="メモ"
+        ><%= todo.memo %></textarea>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-primary mr-5">登録</button>
+        <a href="/todos/<%=todo.id %>" class="btn btn-outline-primary">戻る</a>
+      </div>
     </form>
-    <a href="/todos/<%=todo.id %>">戻る</a>
-  </body>
-</html>
+  </div>
+</div>

@@ -1,41 +1,50 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ToDoの新規登録</title>
-  </head>
-  <body>
-    <h1>ToDoの新規登録</h1>
+<% layout('layouts/boilerplate') %>
+<div class="row">
+  <h1 class="text-center">ToDoの新規登録</h1>
+  <div class="offset-3 col-6">
     <form action="/todos" method="POST">
-      <section>
-        <label for="name">タイトル</label>
-        <input type="text" name="name" id="name" placeholder="タイトル" />
-      </section>
-      <section>
-        <label for="date">日付</label>
-        <input type="date" name="date" id="date" placeholder="日付" />
-      </section>
-      <section>
-        <label for="category">優先順位</label>
-        <select name="category" id="category">
+      <div class="mb-3">
+        <label for="name" class="form-label">タイトル</label>
+        <input
+          class="form-control"
+          type="text"
+          name="name"
+          id="name"
+          placeholder="タイトル"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="date" class="form-label">日付</label>
+        <input
+          class="form-control"
+          type="date"
+          name="date"
+          id="date"
+          placeholder="日付"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="category" class="form-label">優先順位</label>
+        <select class="form-select" name="category" id="category">
           <% for(let category of categories){ %>
           <option value="<%= category %>"><%= category %></option>
           <% } %>
         </select>
-      </section>
-      <section>
-        <label for="memo">メモ</label>
-        <br />
+      </div>
+      <div class="mb-3">
+        <label for="memo" class="form-label">メモ</label>
         <textarea
+          class="form-control"
           name="memo"
           id="memo"
           cols="30"
           rows="5"
           placeholder="メモ"
         ></textarea>
-      </section>
-      <button>登録</button>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-primary">登録</button>
+      </div>
     </form>
-  </body>
-</html>
+  </div>
+</div>
