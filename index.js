@@ -27,8 +27,15 @@ mongoose
 const Todo = require("./models/todo");
 const categories = ["なし", "低", "中", "高"];
 
-app.get("/todos", async (req, res, next) => {
-  try {
+function wrapAsync(fn) {
+  return function (req, res, next) {
+    fn(req, res, next).catch((e) => next(e));
+  };
+}
+
+app.get(
+  "/todos",
+  wrapAsync(async (req, res) => {
     const { category } = req.query;
     if (category) {
       const todos = await Todo.find({ category });
@@ -37,75 +44,73 @@ app.get("/todos", async (req, res, next) => {
       const todos = await Todo.find({});
       res.render("todos/index", { todos });
     }
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
 app.get("/todos/new", (req, res) => {
   res.render("todos/new", { categories });
 });
 
-app.post("/todos", async (req, res, next) => {
-  try {
+app.post(
+  "/todos",
+  wrapAsync(async (req, res) => {
     const newTodo = new Todo(req.body);
     await newTodo.save();
     console.log(newTodo);
     res.redirect(`/todos/${newTodo._id}`);
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
-app.get("/todos/:id", async (req, res, next) => {
-  try {
+app.get(
+  "/todos/:id",
+  wrapAsync(async (req, res) => {
     const { id } = req.params;
     const todo = await Todo.findById(id);
     if (!todo) {
       throw new AppError("ToDoが見つかりません", 404);
     }
     res.render("todos/show", { todo });
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
-app.get("/todos/:id/edit", async (req, res, next) => {
-  try {
+app.get(
+  "/todos/:id/edit",
+  wrapAsync(async (req, res) => {
     const { id } = req.params;
     const todo = await Todo.findById(id);
     if (!todo) {
       throw new AppError("ToDoが見つかりません", 404);
     }
     res.render("todos/edit", { todo, categories });
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
-app.put("/todos/:id", async (req, res, next) => {
-  try {
+app.put(
+  "/todos/:id",
+  wrapAsync(async (req, res) => {
     const { id } = req.params;
     const todo = await Todo.findByIdAndUpdate(id, req.body, {
       runValidators: true,
       new: true,
     });
     res.redirect(`/todos/${todo._id}`);
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
-app.delete("/todos/:id", async (req, res) => {
-  const { id } = req.params;
-  await Todo.findByIdAndDelete(id);
-  res.redirect("/todos");
-});
+app.delete(
+  "/todos/:id",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    await Todo.findByIdAndDelete(id);
+    res.redirect("/todos");
+  })
+);
 
 app.get("*", (req, res) => {
-  res.status(404).json({ msg: "404 Not found!" });
+  throw new AppError("ページが見つかりません", 404);
 });
 
+// カスタムエラーハンドラ
 app.use((err, req, res, next) => {
   const { status = 500, message = "問題が発生しました" } = err;
   res.status(status).send(message);
