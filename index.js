@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
+const AppError = require("./AppError");
 const PORT = 3000;
 
 const app = express();
@@ -26,43 +27,73 @@ mongoose
 const Todo = require("./models/todo");
 const categories = ["なし", "低", "中", "高"];
 
-app.get("/todos", async (req, res) => {
-  const todos = await Todo.find().catch((e) =>
-    res.status(404).json({ msg: "No items found" })
-  );
-  res.render("todos/index", { todos });
+app.get("/todos", async (req, res, next) => {
+  try {
+    const { category } = req.query;
+    if (category) {
+      const todos = await Todo.find({ category });
+      res.render("todos/index", { todos });
+    } else {
+      const todos = await Todo.find({});
+      res.render("todos/index", { todos });
+    }
+  } catch (e) {
+    next(e);
+  }
 });
 
 app.get("/todos/new", (req, res) => {
   res.render("todos/new", { categories });
 });
 
-app.post("/todos", async (req, res) => {
-  const newTodo = new Todo(req.body);
-  await newTodo.save();
-  console.log(newTodo);
-  res.redirect(`/todos/${newTodo._id}`);
+app.post("/todos", async (req, res, next) => {
+  try {
+    const newTodo = new Todo(req.body);
+    await newTodo.save();
+    console.log(newTodo);
+    res.redirect(`/todos/${newTodo._id}`);
+  } catch (e) {
+    next(e);
+  }
 });
 
-app.get("/todos/:id", async (req, res) => {
-  const { id } = req.params;
-  const todo = await Todo.findById(id);
-  res.render("todos/show", { todo });
+app.get("/todos/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const todo = await Todo.findById(id);
+    if (!todo) {
+      throw new AppError("ToDoが見つかりません", 404);
+    }
+    res.render("todos/show", { todo });
+  } catch (e) {
+    next(e);
+  }
 });
 
-app.get("/todos/:id/edit", async (req, res) => {
-  const { id } = req.params;
-  const todo = await Todo.findById(id);
-  res.render("todos/edit", { todo, categories });
+app.get("/todos/:id/edit", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const todo = await Todo.findById(id);
+    if (!todo) {
+      throw new AppError("ToDoが見つかりません", 404);
+    }
+    res.render("todos/edit", { todo, categories });
+  } catch (e) {
+    next(e);
+  }
 });
 
-app.put("/todos/:id", async (req, res) => {
-  const { id } = req.params;
-  const todo = await Todo.findByIdAndUpdate(id, req.body, {
-    runValidators: true,
-    new: true,
-  });
-  res.redirect(`/todos/${todo._id}`);
+app.put("/todos/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const todo = await Todo.findByIdAndUpdate(id, req.body, {
+      runValidators: true,
+      new: true,
+    });
+    res.redirect(`/todos/${todo._id}`);
+  } catch (e) {
+    next(e);
+  }
 });
 
 app.delete("/todos/:id", async (req, res) => {
@@ -72,7 +103,12 @@ app.delete("/todos/:id", async (req, res) => {
 });
 
 app.get("*", (req, res) => {
-  res.send("404 Not found!");
+  res.status(404).json({ msg: "404 Not found!" });
+});
+
+app.use((err, req, res, next) => {
+  const { status = 500, message = "問題が発生しました" } = err;
+  res.status(status).send(message);
 });
 
 app.listen(PORT, () => {
