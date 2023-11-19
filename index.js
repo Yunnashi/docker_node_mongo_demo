@@ -1,7 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
-const AppError = require("./AppError");
+const AppError = require("./utills/AppError");
+const catchAsync = require("./utills/catchAsync");
 const PORT = 3000;
 
 const app = express();
@@ -27,15 +28,9 @@ mongoose
 const Todo = require("./models/todo");
 const categories = ["なし", "低", "中", "高"];
 
-function wrapAsync(fn) {
-  return function (req, res, next) {
-    fn(req, res, next).catch((e) => next(e));
-  };
-}
-
 app.get(
   "/todos",
-  wrapAsync(async (req, res) => {
+  catchAsync(async (req, res) => {
     const { category } = req.query;
     if (category) {
       const todos = await Todo.find({ category });
@@ -53,7 +48,7 @@ app.get("/todos/new", (req, res) => {
 
 app.post(
   "/todos",
-  wrapAsync(async (req, res) => {
+  catchAsync(async (req, res) => {
     const newTodo = new Todo(req.body);
     await newTodo.save();
     console.log(newTodo);
@@ -63,7 +58,7 @@ app.post(
 
 app.get(
   "/todos/:id",
-  wrapAsync(async (req, res) => {
+  catchAsync(async (req, res) => {
     const { id } = req.params;
     const todo = await Todo.findById(id);
     if (!todo) {
@@ -75,7 +70,7 @@ app.get(
 
 app.get(
   "/todos/:id/edit",
-  wrapAsync(async (req, res) => {
+  catchAsync(async (req, res) => {
     const { id } = req.params;
     const todo = await Todo.findById(id);
     if (!todo) {
@@ -87,7 +82,7 @@ app.get(
 
 app.put(
   "/todos/:id",
-  wrapAsync(async (req, res) => {
+  catchAsync(async (req, res) => {
     const { id } = req.params;
     const todo = await Todo.findByIdAndUpdate(id, req.body, {
       runValidators: true,
@@ -99,21 +94,24 @@ app.put(
 
 app.delete(
   "/todos/:id",
-  wrapAsync(async (req, res) => {
+  catchAsync(async (req, res) => {
     const { id } = req.params;
     await Todo.findByIdAndDelete(id);
     res.redirect("/todos");
   })
 );
 
-app.get("*", (req, res) => {
-  throw new AppError("ページが見つかりません", 404);
+app.all("*", (req, res, next) => {
+  next(new AppError("ページが見つかりませんでした。", 404));
 });
 
 // カスタムエラーハンドラ
 app.use((err, req, res, next) => {
-  const { status = 500, message = "問題が発生しました" } = err;
-  res.status(status).send(message);
+  const { status = 500 } = err;
+  if (!err.message) {
+    err.message = "問題が発生しました";
+  }
+  res.status(status).render("error", { err });
 });
 
 app.listen(PORT, () => {
