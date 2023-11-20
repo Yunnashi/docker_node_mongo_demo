@@ -8,7 +8,6 @@ const todoSchema = new mongoose.Schema({
   date: {
     type: String,
     required: false,
-    min: 0,
   },
   category: {
     type: String,
