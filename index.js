@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
+const Joi = require("joi");
 const AppError = require("./utills/AppError");
 const catchAsync = require("./utills/catchAsync");
 const PORT = 3000;
@@ -49,6 +50,17 @@ app.get("/todos/new", (req, res) => {
 app.post(
   "/todos",
   catchAsync(async (req, res) => {
+    const todoSchema = Joi.object({
+      name: Joi.string().required(),
+      date: Joi.string().optional().allow(""),
+      category: Joi.string().required(),
+      memo: Joi.string().optional().allow(""),
+    });
+    const { error } = todoSchema.validate(req.body);
+    if (error) {
+      const msg = error.details.map((detail) => detail.message).join(",");
+      throw new AppError(msg, 400);
+    }
     const newTodo = new Todo(req.body);
     await newTodo.save();
     console.log(newTodo);
@@ -83,6 +95,17 @@ app.get(
 app.put(
   "/todos/:id",
   catchAsync(async (req, res) => {
+    const todoSchema = Joi.object({
+      name: Joi.string().required(),
+      date: Joi.string().optional().allow(""),
+      category: Joi.string().required(),
+      memo: Joi.string().optional().allow(""),
+    });
+    const { error } = todoSchema.validate(req.body);
+    if (error) {
+      const msg = error.details.map((detail) => detail.message).join(",");
+      throw new AppError(msg, 400);
+    }
     const { id } = req.params;
     const todo = await Todo.findByIdAndUpdate(id, req.body, {
       runValidators: true,
