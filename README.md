@@ -8,6 +8,10 @@ Express＋Mongoose＋MongoDBで作成しています。
 
 ejsにて簡易的な画面を作成しています。
 
+▼デモ動画
+
+https://github.com/Yunnashi/docker_node_mongo_demo/assets/134183050/f422626d-b036-4fa4-b487-f720902fa76b
+
 ## RUST の内容
 
 GET /todos - ToDo 一覧を取得
