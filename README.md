@@ -1,4 +1,53 @@
-# Docker Node MongoDB DEMO
+# Docker Node MongoDB Demo
+
+This is a simple REST API server for a TODO application.
+
+The API is built using Express, Mongoose, and MongoDB.
+
+A minimal frontend is implemented using EJS for demonstration purposes.
+
+## Demo Video
+https://github.com/Yunnashi/docker_node_mongo_demo/assets/134183050/f422626d-b036-4fa4-b487-f720902fa76b
+
+## API Endpoints
+
+- GET /todos  
+  Retrieve all TODO items
+
+- POST /todos  
+  Create a new TODO item
+
+- GET /todos/:id  
+  Retrieve a specific TODO item by ID
+
+- PUT /todos/:id  
+  Update a specific TODO item by ID
+
+- DELETE /todos/:id  
+  Delete a specific TODO item by ID
+
+## Quick Start
+
+```bash
+# Build and run with Docker
+docker compose up -d --build
+
+# Stop containers
+docker compose down
+
+# Rebuild containers
+docker compose build
+```
+## MongoDB Usage Notes
+```bash
+# Access MongoDB container
+docker exec -it mongo bash
+
+# Start MongoDB shell
+mongosh
+```
+
+----------
 
 この API の説明
 
